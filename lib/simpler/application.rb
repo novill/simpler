@@ -3,7 +3,6 @@ require 'singleton'
 require 'sequel'
 require_relative 'router'
 require_relative 'controller'
-require_relative 'notfound_controller'
 
 module Simpler
   class Application
@@ -29,23 +28,16 @@ module Simpler
 
     def call(env)
       route = @router.route_for(env)
-      controller = route.controller.new(env, route.params)
-      action = route.action
+      return make_not_found_response unless route
 
-      log_request(env[:logger], controller, action)
+      env['route.params'] = route.params
+      controller = route.controller.new(env)
+      action = route.action
 
       make_response(controller, action)
     end
 
     private
-
-    def log_request(logger, controller, action)
-      if logger
-        logger.info("Controler: #{controller.class}")
-        logger.info("Action: #{action}")
-        logger.info("Params: #{controller.params}")
-      end
-    end
 
     def require_app
       Dir["#{Simpler.root}/app/**/*.rb"].each { |file| require file }
@@ -64,5 +56,10 @@ module Simpler
     def make_response(controller, action)
       controller.make_response(action)
     end
+
+    def make_not_found_response
+      Rack::Response.new('Not found!', 404,{'Content-Type' => 'text/plain'})
+    end
+
   end
 end

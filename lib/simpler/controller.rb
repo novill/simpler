@@ -5,8 +5,7 @@ module Simpler
 
     attr_reader :name, :request, :response
 
-    def initialize(env, route_params)
-      @route_params = route_params
+    def initialize(env)
       @name = extract_name
       @request = Rack::Request.new(env)
       @response = Rack::Response.new
@@ -24,7 +23,7 @@ module Simpler
     end
 
     def params
-      @request.params.merge(@route_params)
+      @request.params.merge(@request.env['route.params'])
     end
 
     protected

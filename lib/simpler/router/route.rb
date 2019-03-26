@@ -15,15 +15,16 @@ module Simpler
       def match?(method, path)
         return false if @method != method
         # path.match(@path)
-        arr_match?(path)
+        path_match?(path)
       end
 
       private
 
-      def arr_match?(get_path) #сначала без регулярок
-        route_path = @path
-        get_path_array = get_path.split('/')
-        route_path_array = route_path.split('/')
+      def path_match?(path)
+
+        #такие названия, чтобы отличать запрашиваемый путь и путь в роуте
+        get_path_array = path.split('/')
+        route_path_array = @path.split('/')
         return false unless get_path_array.size == route_path_array.size
         params = {}
 
