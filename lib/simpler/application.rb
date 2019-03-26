@@ -3,7 +3,7 @@ require 'singleton'
 require 'sequel'
 require_relative 'router'
 require_relative 'controller'
-require_relative 'NotfoundController'
+require_relative 'notfound_controller'
 
 module Simpler
   class Application
