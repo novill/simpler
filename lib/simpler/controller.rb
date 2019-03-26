@@ -22,6 +22,20 @@ module Simpler
       @response.finish
     end
 
+    def params
+      @request.params.merge(@request.env['route.params'])
+    end
+
+    protected
+
+    def set_header(key, value)
+      @response.set_header(key, value)
+    end
+
+    def set_status(status)
+      @response.status = status
+    end
+
     private
 
     def extract_name
@@ -42,13 +56,13 @@ module Simpler
       View.new(@request.env).render(binding)
     end
 
-    def params
-      @request.params
+    def render(template_or_response)
+      if template_or_response.instance_of?(String)
+        @request.env['simpler.template'] = template_or_response
+      elsif template_or_response.instance_of?(Hash)
+        @request.env['simpler.respond_type'] = template_or_response.keys[0]
+        @request.env['simpler.respond_value'] = template_or_response.values[0]
+      end
     end
-
-    def render(template)
-      @request.env['simpler.template'] = template
-    end
-
   end
 end
