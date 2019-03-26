@@ -23,9 +23,13 @@ module Simpler
       @response.finish
     end
 
+    def params
+      @request.params.merge(@route_params)
+    end
+
     protected
 
-    def set_header(key,value)
+    def set_header(key, value)
       @response.set_header(key, value)
     end
 
@@ -51,10 +55,6 @@ module Simpler
 
     def render_body
       View.new(@request.env).render(binding)
-    end
-
-    def params
-      @request.params.merge(@route_params)
     end
 
     def render(template_or_response)

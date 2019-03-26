@@ -29,7 +29,7 @@ module Simpler
 
         route_path_array.each.with_index do |route_path_element, index|
           if route_path_element[0] == ':'
-            params.merge!(route_path_element[1..-1] => get_path_array[index])
+            params.merge!(route_path_element[1..-1].to_sym => get_path_array[index])
           else
             return false unless route_path_element == get_path_array[index]
           end

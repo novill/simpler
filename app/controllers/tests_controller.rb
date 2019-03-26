@@ -15,7 +15,7 @@ class TestsController < Simpler::Controller
 
   def show
     set_header('Content-Type', 'text/plain')
-    render plain: "Showing test #{params['id']}. Now is #{Time.now}"
+    render plain: "Showing test #{params[:id]}. Now is #{Time.now}"
   end
 
   def create

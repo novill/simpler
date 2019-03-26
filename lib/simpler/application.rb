@@ -32,10 +32,20 @@ module Simpler
       controller = route.controller.new(env, route.params)
       action = route.action
 
+      log_request(env[:logger], controller, action)
+
       make_response(controller, action)
     end
 
     private
+
+    def log_request(logger, controller, action)
+      if logger
+        logger.info("Controler: #{controller.class}")
+        logger.info("Action: #{action}")
+        logger.info("Params: #{controller.params}")
+      end
+    end
 
     def require_app
       Dir["#{Simpler.root}/app/**/*.rb"].each { |file| require file }
